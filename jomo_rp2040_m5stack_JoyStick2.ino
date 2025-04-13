@@ -47,6 +47,8 @@ void setup()
     Wire.setSCL(1);
     Wire.begin();
 
+    delay(500);
+
     uint16_t val[2];
     get_joy_adc_16bits_value_xy(&val[0], &val[1]);
     for(int i=0; i<2; i++) {
@@ -54,7 +56,7 @@ void setup()
         calibrated_data[i][1] = val[i];
     }
 
-    for(int n=0; n < 20; n++) {
+    for(int n=0; n < 100; n++) {
         get_joy_adc_16bits_value_xy(&val[0], &val[1]);
         for(int i=0; i<2; i++) {
             if( val[i] < calibrated_data[i][0] ) {
@@ -64,11 +66,11 @@ void setup()
                 calibrated_data[i][1] = val[i];
             }
         }
-        delay(10);
+        delay(5);
     }
 
     for(int i=0; i<2; i++) {
-        uint16_t margin = 1000;
+        uint16_t margin = 1200;
         calibrated_data[i][0] -= margin;
         calibrated_data[i][1] += margin;
     }
@@ -98,7 +100,7 @@ void loop()
 {
     int val[2];
     read_joystick(val);
-    // Serial.printf("x: %d, y:%d\r\n", val[0], val[1]);
+    //Serial.printf("x: %d, y:%d\r\n", val[0], val[1]);
     Mouse.move(val[0]/-500, val[1]/-500, 0);
     delay(30);
 }
